@@ -1,0 +1,5 @@
+---
+- name: "Include labocbz.deploy_mariadb playbook"
+  tags:
+      - "labocbz.deploy_mariadb"
+  ansible.builtin.import_playbook: "../../playbook.yml"
