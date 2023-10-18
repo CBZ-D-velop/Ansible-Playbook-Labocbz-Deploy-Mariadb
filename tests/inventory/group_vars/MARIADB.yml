@@ -53,7 +53,7 @@ inv_mariadb_cert_bundles:
     type: "CA"
     src: "/tmp/My-Local-Ansible-Intermediate-CA-2.pem.crt"
 
-  - name: "my-apacheds-cluster.domain.tld"
+  - name: "my-mariadb-cluster.domain.tld"
     type: "cert"
     src: "/tmp/my-mariadb-cluster.domain.tld.zip"
     dest: "{{ inv_install_mariadb_ssl_path }}"
