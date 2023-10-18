@@ -7,6 +7,8 @@
   become: true
   become_method: sudo
   become_user: root
+  tags:
+    - "labocbz.install_mariadb"
 
   tasks:
     - name: "Include labocbz.add_certificates"
