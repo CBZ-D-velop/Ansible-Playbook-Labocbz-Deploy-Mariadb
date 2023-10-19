@@ -18,7 +18,15 @@
 
 An Ansible playbook to deploy and configure Mariadb on your host.
 
+This playbook streamlines the installation and configuration of MariaDB. It offers the flexibility to configure a multi-master cluster using Galera. The playbook is adept at setting up and configuring the cluster while also allowing you to modify and customize an administrative account for enhanced security. Additionally, it automates the steps typically carried out by the mysql_secure_installation command, making your MariaDB deployment and management even more convenient and secure.
+
+With this playbook, you can effortlessly manage MariaDB, whether it's a standalone installation or a complex, multi-master cluster, while ensuring security and reliability.
+
 ## Deployment diagramm
+
+![](./assets/Ansible-Playbook-Labocbz-Deploy-Mariadb.drawio.svg)
+
+This represents a potential deployment achieved with this playbook. We can observe a MariaDB service component, with the subsystem consisting of three MariaDB components installed across three servers. We can see that the nodes interact with each other, creating a multi-master cluster, which comes with its own set of advantages and disadvantages. Communications are end-to-end encrypted, and we can even implement mTLS for enhanced security.
 
 ## Tests and simulations
 
@@ -92,6 +100,11 @@ Here you can put your change to keep a trace of your work and decisions.
 
 * First init of this playbook with the bootstrap_playbook playbook by Lord Robin Crombez
 
+### 2023-10-19: Fix and Push
+
+* Playbook can deploy Mariadb in cluster or standalone
+* Readme and schema added
+
 ## Authors
 
 * Lord Robin Crombez
@@ -100,3 +113,4 @@ Here you can put your change to keep a trace of your work and decisions.
 
 * [Ansible playbook documentation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_playbooks.html)
 * [Ansible Molecule documentation](https://molecule.readthedocs.io/)
+* [labocbz.install_mariadb](https://github.com/CBZ-D-velop/Ansible-Role-Labocbz-Install-Mariadb.git)
