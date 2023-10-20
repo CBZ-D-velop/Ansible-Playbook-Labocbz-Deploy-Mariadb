@@ -104,6 +104,7 @@ Here you can put your change to keep a trace of your work and decisions.
 
 * Playbook can deploy Mariadb in cluster or standalone
 * Readme and schema added
+* Testing method doesn't use the idempotency, because of CI
 
 ## Authors
 
