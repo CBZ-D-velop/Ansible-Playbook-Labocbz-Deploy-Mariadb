@@ -1,6 +1,6 @@
 ---
 - name: "Deploy Mariadb"
-  hosts: "all"
+  hosts: "{{ tower_env | default([]) }}"
   gather_facts: true
   remote_user: root
   strategy: free
