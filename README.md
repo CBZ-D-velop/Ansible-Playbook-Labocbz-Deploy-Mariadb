@@ -106,6 +106,11 @@ Here you can put your change to keep a trace of your work and decisions.
 * Readme and schema added
 * Testing method doesn't use the idempotency, because of CI
 
+### 202311-11: Prepare Host and Boolean
+
+* Prepare host role is now called
+* You can install or not whit a boolean value
+
 ## Authors
 
 * Lord Robin Crombez
