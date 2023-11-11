@@ -1,4 +1,5 @@
 ---
+inv_install_mariadb: true
 
 inv_install_mariadb_confs_path: "/etc/mysql"
 inv_install_mariadb_config_path: "{{ inv_install_mariadb_confs_path }}/mariadb.conf.d"
@@ -36,6 +37,7 @@ inv_install_mariadb_galera_node_list:
   - "molecule-local-instance-1-deploy-mariadb"
   - "molecule-local-instance-2-deploy-mariadb"
   - "molecule-local-instance-3-deploy-mariadb"
+
 inv_install_mariadb_galera_cluster_seed_host: "molecule-local-instance-1-deploy-mariadb"
 
 inv_install_mariadb_secure_root_password: "PN$^L8zP*wm@3q"
