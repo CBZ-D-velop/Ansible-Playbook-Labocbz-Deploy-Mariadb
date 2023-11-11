@@ -18,7 +18,6 @@
         - name: "Include labocbz.prepare_host"
           tags:
             - "labocbz.prepare_host"
-          vars:
           ansible.builtin.include_role:
             name: "labocbz.prepare_host"
 
