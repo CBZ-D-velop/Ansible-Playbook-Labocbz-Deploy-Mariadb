@@ -106,10 +106,15 @@ Here you can put your change to keep a trace of your work and decisions.
 * Readme and schema added
 * Testing method doesn't use the idempotency, because of CI
 
-### 202311-11: Prepare Host and Boolean
+### 2023-11-11: Prepare Host and Boolean
 
 * Prepare host role is now called
 * You can install or not whit a boolean value
+
+### 2023-12-18: System user and logs
+
+* Added system users
+* Added log custom rotation
 
 ## Authors
 

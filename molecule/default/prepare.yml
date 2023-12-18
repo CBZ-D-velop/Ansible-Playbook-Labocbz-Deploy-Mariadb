@@ -1,7 +1,7 @@
 ---
 # if you have any prepararion task
 - name: "Prepare"
-  hosts: "all"
+  hosts: "all:&MARIADB"
   gather_facts: true
   tasks:
 
@@ -28,12 +28,6 @@
       changed_when: output.rc != 0
       ansible.builtin.shell: "echo \"{{ hostvars[host]['ansible_default_ipv4']['address'] }}  {{ host }} # from Molecule\" >> /etc/hosts"
 
-# if you have any prepararion task
-- name: "Prepare Mariadb"
-  hosts: "all:&MARIADB"
-  gather_facts: true
-  tasks:
-
     - name: "Import cryptographic content if needed (cert)"
       loop: "{{ inv_mariadb_cert_bundles }}"
       loop_control:
@@ -57,23 +51,3 @@
         owner: "root"
         group: "root"
         mode: 0700
-
-    #- name: "Include labocbz.add_certificates"
-    #  tags:
-    #    - "labocbz.add_certificates"
-    #  loop: "{{ inv_cert_bundles }}"
-    #  loop_control:
-    #    loop_var: bundle
-    #  when: inv_cert_bundles is defined
-    #  vars:
-    #    add_certificates_bundle_name: "{{ bundle.name }}"
-    #    add_certificates_bundle_type: "{{ bundle.type }}"
-    #    add_certificates_bundle_src: "{{ bundle.src }}"
-    #    add_certificates_bundle_dest: "{{ bundle.dest }}"
-    #    #add_certificates_bundle_src_user: "{{ bundle.src_user }}"
-    #    #add_certificates_bundle_src_password: "{{ bundle.src_password }}"
-    #    #add_certificates_bundle_dest_user: "{{ bundle.dest_user }}"
-    #    #add_certificates_bundle_dest_group: "{{ bundle.dest_group }}"
-    #    #add_certificates_bundle_dest_mode: "{{ bundle.dest_mode }}"
-    #  ansible.builtin.include_role:
-    #    name: "labocbz.add_certificates"

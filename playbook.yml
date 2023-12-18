@@ -2,13 +2,9 @@
 - name: "Deploy Mariadb"
   hosts: "{{ tower_env | default([]) }}"
   gather_facts: true
-  remote_user: root
-  strategy: free
   become: true
   become_method: sudo
   become_user: root
-  tags:
-    - "labocbz.install_mariadb"
 
   tasks:
 
@@ -18,6 +14,8 @@
         - name: "Include labocbz.prepare_host"
           tags:
             - "labocbz.prepare_host"
+          vars:
+            prepare_host_system_users: "{{ inv_prepare_host_mariadb_system_users }}"
           ansible.builtin.include_role:
             name: "labocbz.prepare_host"
 
@@ -76,3 +74,16 @@
             install_mariadb_secure_root_password: "{{ inv_install_mariadb_secure_root_password }}"
           ansible.builtin.include_role:
             name: "labocbz.install_mariadb"
+
+        - name: "Remove /etc/logrotate.d/mariadb file"
+          ansible.builtin.file:
+            path: "/etc/logrotate.d/mariadb"
+            state: absent
+
+        - name: "Include labocbz.add_logrotate_confs"
+          tags:
+            - "labocbz.add_logrotate_confs"
+          vars:
+            logrotate_configurations: "{{ inv_logrotate_mariadb_configurations }}"
+          ansible.builtin.include_role:
+            name: "labocbz.add_logrotate_confs"
