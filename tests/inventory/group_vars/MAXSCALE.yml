@@ -1,0 +1,72 @@
+---
+inv_install_maxscale: true
+
+inv_prepare_host__maxscale_system_users:
+  - login: "maxscale"
+    group: "maxscale"
+
+inv_install_maxscale__admin_login: "root"
+inv_install_maxscale__admin_password: "PN$^L8zP*wm@3q"
+
+inv_install_maxscale__database_user_login: "maxscale"
+inv_install_maxscale__database_user_password: "PN$^L8zPM8d58Z*wm@3q"
+
+#inv_install_maxscale__mariadb_servers:
+#  - { name: "server-1", port: 3306, address: "{{ hostvars['molecule-local-instance-1-deploy-mariadb']['ansible_default_ipv4']['address'] }}" }
+#  - { name: "server-2", port: 3306, address: "{{ hostvars['molecule-local-instance-2-deploy-mariadb']['ansible_default_ipv4']['address'] }}" }
+#  - { name: "server-3", port: 3306, address: "{{ hostvars['molecule-local-instance-3-deploy-mariadb']['ansible_default_ipv4']['address'] }}" }
+
+inv_install_maxscale__mariadb_server_ssl: true
+inv_install_maxscale__mariadb_server_type: "galeramon" #mariadbmon
+inv_install_maxscale__mariadb_server_ssl_ca: "/etc/maxscale/ssl/my-mariadb-cluster.domain.tld/ca-chain.pem.crt"
+inv_install_maxscale__mariadb_server_ssl_client_auth: true
+inv_install_maxscale__mariadb_server_ssl_cert: "/etc/maxscale/ssl/my-mariadb-cluster.domain.tld/my-mariadb-cluster.domain.tld.pem.crt"
+inv_install_maxscale__mariadb_server_ssl_key: "/etc/maxscale/ssl/my-mariadb-cluster.domain.tld/my-mariadb-cluster.domain.tld.pem.key"
+inv_install_maxscale__mariadb_server_ssl_version: "MAX" # TLSv10, TLSv11, TLSv12, TLSv13
+inv_install_maxscale__mariadb_server_ssl_verify_peer_certificate: false
+inv_install_maxscale__mariadb_server_ssl_verify_peer_host: false
+
+inv_install_maxscale__listener_server_port: 3307
+inv_install_maxscale__listener_server_address: "0.0.0.0"
+inv_install_maxscale__listener_server_ssl: true
+inv_install_maxscale__listener_server_ssl_client_auth: true
+inv_install_maxscale__listener_server_ssl_ca: "/etc/maxscale/ssl/my-mariadb-cluster.domain.tld/ca-chain.pem.crt"
+inv_install_maxscale__listener_server_ssl_cert: "/etc/maxscale/ssl/my-mariadb-cluster.domain.tld/my-mariadb-cluster.domain.tld.pem.crt"
+inv_install_maxscale__listener_server_ssl_key: "/etc/maxscale/ssl/my-mariadb-cluster.domain.tld/my-mariadb-cluster.domain.tld.pem.key"
+
+inv_install_maxscale__threads: "auto"
+inv_install_maxscale__threads_max: 256
+inv_install_maxscale__admin_enabled: true
+inv_install_maxscale__admin_gui: true
+inv_install_maxscale__admin_host: "0.0.0.0"
+inv_install_maxscale__admin_port: 8989
+inv_install_maxscale__admin_secure_gui: true
+inv_install_maxscale__admin_ssl_ca: "/etc/maxscale/ssl/my-mariadb-cluster.domain.tld/ca-chain.pem.crt"
+inv_install_maxscale__admin_ssl_cert: "/etc/maxscale/ssl/my-mariadb-cluster.domain.tld/my-mariadb-cluster.domain.tld.pem.crt"
+inv_install_maxscale__admin_ssl_key: "/etc/maxscale/ssl/my-mariadb-cluster.domain.tld/my-mariadb-cluster.domain.tld.pem.key"
+
+inv_maxscale_cert_bundles:
+  - name: "My-Local-Ansible-Root-CA.pem.crt"
+    type: "CA"
+    src: "/tmp/My-Local-Ansible-Root-CA.pem.crt"
+
+  - name: "My-Local-Ansible-Intermediate-CA-1.pem.crt"
+    type: "CA"
+    src: "/tmp/My-Local-Ansible-Intermediate-CA-1.pem.crt"
+
+  - name: "My-Local-Ansible-Intermediate-CA-2.pem.crt"
+    type: "CA"
+    src: "/tmp/My-Local-Ansible-Intermediate-CA-2.pem.crt"
+
+  - name: "my-mariadb-cluster.domain.tld"
+    type: "cert"
+    src: "/tmp/my-mariadb-cluster.domain.tld.zip"
+    dest: "/etc/maxscale/ssl"
+    #src_user: "myUser"
+    #src_password: "secretPassword"
+    dest_user: "maxscale"
+    dest_group: "maxscale"
+    dest_mode: "0700"
+
+inv_add_logrotate_confs__maxscale_configurations:
+  - "maxscale-server"
