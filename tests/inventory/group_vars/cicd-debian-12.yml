@@ -1,0 +1,15 @@
+---
+inv_install_mariadb__galera_cluster: true
+inv_install_mariadb__galera_clustername: "my-Galera-cluster"
+inv_install_mariadb__galera_node_name: "{{ inventory_hostname }}"
+inv_install_mariadb__galera_node_address: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+inv_install_mariadb__galera_node_list:
+  - "molecule-cicd-debian-12-instance-1-deploy-mariadb"
+  - "molecule-cicd-debian-12-instance-2-deploy-mariadb"
+  - "molecule-cicd-debian-12-instance-3-deploy-mariadb"
+inv_install_mariadb__galera_cluster_seed_host: "molecule-cicd-debian-12-instance-1-deploy-mariadb"
+
+inv_install_maxscale__mariadb_servers:
+  - { name: "server-1", port: 3306, address: "{{ hostvars['molecule-cicd-debian-12-instance-1-deploy-mariadb']['ansible_default_ipv4']['address'] }}" }
+  - { name: "server-2", port: 3306, address: "{{ hostvars['molecule-cicd-debian-12-instance-2-deploy-mariadb']['ansible_default_ipv4']['address'] }}" }
+  - { name: "server-3", port: 3306, address: "{{ hostvars['molecule-cicd-debian-12-instance-3-deploy-mariadb']['ansible_default_ipv4']['address'] }}" }

@@ -3,5 +3,5 @@
   tags:
       - "labocbz.deploy_pihole"
   vars:
-    tower_env: "cicd-debian-11"
+    tower_env: "cicd-debian-12"
   ansible.builtin.import_playbook: "../../playbook.yml"

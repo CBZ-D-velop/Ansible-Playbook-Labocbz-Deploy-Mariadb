@@ -1,16 +1,15 @@
 ---
 - name: "labocbz.prepare_host"
   src: "https://github.com/CBZ-D-velop/Ansible-Role-Labocbz-Prepare-Host.git"
-  version: "2.1"
 
 - name: "labocbz.add_certificates"
   src: "https://github.com/CBZ-D-velop/Ansible-Role-Labocbz-Add-Certificates.git"
-  version: "2.0"
 
 - name: "labocbz.install_mariadb"
   src: "https://github.com/CBZ-D-velop/Ansible-Role-Labocbz-Install-Mariadb.git"
-  version: "3.0"
+
+- name: "labocbz.install_maxscale"
+  src: "https://github.com/CBZ-D-velop/Ansible-Role-Labocbz-Install-MaxScale.git"
 
 - name: "labocbz.add_logrotate_confs"
   src: "https://github.com/CBZ-D-velop/Ansible-Role-Labocbz-Add-Logrotate-Confs.git"
-  version: "2.2"
