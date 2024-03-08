@@ -174,3 +174,91 @@
           when: inv_add_logrotate_confs__mariadb_configurations | default(false)
           ansible.builtin.include_role:
             name: "labocbz.add_logrotate_confs"
+
+    - name: "Install Apache2"
+      when: inv_install_apache | default(false)
+      block:
+        - name: "Include labocbz.prepare_host"
+          tags:
+            - "labocbz.prepare_host"
+          vars:
+            prepare_host__system_users: "{{ inv_prepare_host__apache_system_users }}"
+          ansible.builtin.include_role:
+            name: "labocbz.prepare_host"
+
+        - name: "Include labocbz.add_certificates"
+          tags:
+            - "labocbz.add_certificates"
+          loop: "{{ inv_add_apache_confs__configurations_cert_bundles }}"
+          loop_control:
+            loop_var: bundle
+          when: inv_add_apache_confs__configurations_cert_bundles is defined
+          vars:
+            add_certificates__bundle_name: "{{ bundle.name }}"
+            add_certificates__bundle_type: "{{ bundle.type }}"
+            add_certificates__bundle_src: "{{ bundle.src }}"
+            add_certificates__bundle_dest: "{{ bundle.dest }}"
+            add_certificates__bundle_src_user: "{{ bundle.src_user }}"
+            add_certificates__bundle_src_password: "{{ bundle.src_password }}"
+            add_certificates__bundle_dest_user: "{{ bundle.dest_user }}"
+            add_certificates__bundle_dest_group: "{{ bundle.dest_group }}"
+            add_certificates__bundle_dest_mode: "{{ bundle.dest_mode }}"
+          ansible.builtin.include_role:
+            name: "labocbz.add_certificates"
+
+        - name: "Include labocbz.install_apache"
+          tags:
+            - "labocbz.install_apache"
+          vars:
+            install_apache__https_listen_port: "{{ inv_install_apache__https_listen_port }}"
+            install_apache__http_listen_port: "{{ inv_install_apache__http_listen_port }}"
+            install_apache__modules: "{{ inv_install_apache__modules }}"
+            install_apache__enable_qos: "{{ inv_install_apache__enable_qos }}"
+            install_apache__enable_security: "{{ inv_install_apache__enable_security }}"
+            install_apache__security_core_version: "{{ inv_install_apache__security_core_version }}"
+            install_apache__remove_all_vhosts: "{{ inv_install_apache__remove_all_vhosts }}"
+            install_apache__loglevel: "{{ inv_install_apache__loglevel }}"
+            install_apache__security_version: "{{ inv_install_apache__security_version }}"
+            install_apache__enable_evasive: "{{ inv_install_apache__enable_evasive }}"
+            install_apache__enable_pagespeed: "{{ inv_install_apache__enable_pagespeed }}"
+            install_apache__enable_prefork: "{{ inv_install_apache__enable_prefork }}"
+          ansible.builtin.include_role:
+            name: "labocbz.install_apache"
+
+        - name: "Include labocbz.add_apache_confs"
+          tags:
+            - "labocbz.add_apache_confs"
+          vars:
+            add_apache_confs__http_listen_port: "{{ inv_add_apache_confs__http_listen_port }}"
+            add_apache_confs__https_listen_port: "{{ inv_add_apache_confs__https_listen_port }}"
+            add_apache_confs__ldap_url: "{{ inv_add_apache_confs__ldap_url }}"
+            add_apache_confs__ldap_port: "{{ inv_add_apache_confs__ldap_port }}"
+            add_apache_confs__ldap_dc: "{{ inv_add_apache_confs__ldap_dc }}"
+            add_apache_confs__auth_ldap_url: "{{ inv_add_apache_confs__auth_ldap_url }}"
+            add_apache_confs__custom_ldap_base_header: "{{ inv_add_apache_confs__custom_ldap_base_header }}"
+            add_apache_confs__webmaster: "{{ inv_add_apache_confs__webmaster }}"
+            add_apache_confs__request_body: "{{ inv_add_apache_confs__request_body }}"
+            add_apache_confs__security_body_limit: "{{ inv_add_apache_confs__security_body_limit }}"
+            add_apache_confs__ssl_files_path: "{{ inv_add_apache_confs__ssl_files_path }}"
+            add_apache_confs__conf_path: "{{ inv_add_apache_confs__conf_path }}"
+            add_apache_confs__base_document_root: "{{ inv_add_apache_confs__base_document_root }}"
+            add_apache_confs__configurations: "{{ inv_add_apache_confs__configurations }}"
+          ansible.builtin.include_role:
+            name: "labocbz.add_apache_confs"
+
+        - name: "Include labocbz.add_logrotate_confs"
+          tags:
+            - "labocbz.add_logrotate_confs"
+          vars:
+            add_logrotate_confs__files: "{{ inv_add_logrotate_confs__apache_configurations }}"
+          ansible.builtin.include_role:
+            name: "labocbz.add_logrotate_confs"
+
+        - name: "Block all trafic from other hosts on port MaxScale HTTP(S) (disable acces to Portainer without Apache2)"
+          ansible.builtin.iptables:
+            chain: "INPUT"
+            protocol: "tcp"
+            destination_port: "{{ inv_install_maxscale__admin_port }}"
+            jump: "DROP"
+            source: "! 127.0.0.1"
+            comment: "Force external user to use Apache2"
