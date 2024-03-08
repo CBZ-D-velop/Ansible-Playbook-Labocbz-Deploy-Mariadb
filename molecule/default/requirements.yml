@@ -11,5 +11,11 @@
 - name: "labocbz.install_maxscale"
   src: "https://github.com/CBZ-D-velop/Ansible-Role-Labocbz-Install-MaxScale.git"
 
+- name: "labocbz.install_apache"
+  src: "https://github.com/CBZ-D-velop/Ansible-Role-Labocbz-Install-Apache.git"
+
+- name: "labocbz.add_apache_confs"
+  src: "https://github.com/CBZ-D-velop/Ansible-Role-Labocbz-Add-Apache-Confs.git"
+
 - name: "labocbz.add_logrotate_confs"
   src: "https://github.com/CBZ-D-velop/Ansible-Role-Labocbz-Add-Logrotate-Confs.git"
