@@ -254,7 +254,7 @@
           ansible.builtin.include_role:
             name: "labocbz.add_logrotate_confs"
 
-        - name: "Block all trafic from other hosts on port MaxScale HTTP(S) (disable acces to Portainer without Apache2)"
+        - name: "Block all trafic from other hosts on port MaxScale HTTP(S) (disable acces to MaxScale without Apache2)"
           ansible.builtin.iptables:
             chain: "INPUT"
             protocol: "tcp"
