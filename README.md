@@ -17,22 +17,26 @@
 ![Tag: mTLS](https://img.shields.io/badge/Tech-mTLS-orange)
 ![Tag: MaxScale](https://img.shields.io/badge/Tech-MaxScale-orange)
 
-An Ansible playbook to deploy and configure Mariadb on your host.
 
+An Ansible playbook to deploy and configure MariaDB on your host.
 
 This playbook streamlines the installation and configuration of MariaDB. It offers the flexibility to configure a multi-master cluster using Galera. The playbook is adept at setting up and configuring the cluster while also allowing you to modify and customize an administrative account for enhanced security. Additionally, it automates the steps typically carried out by the mysql_secure_installation command, making your MariaDB deployment and management even more convenient and secure.
 
-Furthermore, this Ansible role can be extended to incorporate MaxScale, a powerful database proxy that provides advanced database routing, load balancing, and query routing functionalities for MariaDB deployments. Integrating MaxScale into your Ansible playbook enhances the scalability and performance of your MariaDB infrastructure by efficiently distributing database traffic and optimizing query performance. With MaxScale seamlessly integrated into your MariaDB deployment automation, you can achieve unparalleled reliability and efficiency in managing your database clusters.
+Furthermore, Apache2 is installed and configured to serve as the HTTP reverse proxy for the MaxScale HTTP Admin Web UI. This component allows for secure access to the MaxScale administration interface, providing encrypted communication channels to safeguard sensitive administrative operations.
+
+This Ansible role can also be extended to incorporate MaxScale, a powerful database proxy that provides advanced database routing, load balancing, and query routing functionalities for MariaDB deployments. Integrating MaxScale into your Ansible playbook enhances the scalability and performance of your MariaDB infrastructure by efficiently distributing database traffic and optimizing query performance. With MaxScale seamlessly integrated into your MariaDB deployment automation, you can achieve unparalleled reliability and efficiency in managing your database clusters.
 
 ## Deployment diagramm
 
 ![](./assets/Ansible-Playbook-Labocbz-Deploy-Mariadb.drawio.svg)
 
-This represents a potential deployment achieved with this playbook. We can observe a MariaDB service component, with the subsystem consisting of three MariaDB components installed across three servers. We can see that the nodes interact with each other, creating a multi-master cluster, which comes with its own set of advantages and disadvantages. Communications are end-to-end encrypted, and we can even implement mTLS for enhanced security.
+This diagram depicts a potential deployment achieved with the described playbook. At its core lies a MariaDB service component, with three MariaDB instances distributed across three servers. These nodes interact with each other, forming a multi-master cluster, which offers advantages such as high availability and scalability.
 
-To further enhance the resilience and performance of this multi-master cluster, we can integrate MaxScale as an additional layer in the architecture. MaxScale acts as a database proxy, providing advanced functionalities such as database routing, load balancing, and query routing. By incorporating MaxScale into the deployment, we can achieve optimized write operations by directing them to a single node within the cluster, thus minimizing lock and write errors that might occur in a typical multi-master configuration.
+To bolster the resilience and performance of this multi-master cluster, MaxScale is integrated as an additional layer in the architecture. MaxScale functions as a database proxy, offering advanced functionalities including database routing, load balancing, and query routing. Through this integration, write operations are optimized by directing them to a single node within the cluster, thus mitigating potential lock and write errors that may arise in a traditional multi-master configuration.
 
-With MaxScale intelligently managing write operations, the Galera multi-master cluster becomes even more robust and efficient, ensuring high availability and reliability for your MariaDB deployment. This integrated solution not only enhances the scalability and performance of the database infrastructure but also simplifies management and maintenance tasks, providing a streamlined and resilient solution for your database needs.
+In addition to the database components, Apache2 is installed and configured to serve as the HTTP reverse proxy for the MaxScale HTTP Admin Web UI. This component provides secure access to the MaxScale administration interface, ensuring encrypted communication channels and safeguarding sensitive administrative operations.
+
+With MaxScale orchestrating write operations and Apache2 facilitating secure access to the MaxScale administration interface, the Galera multi-master cluster exhibits increased robustness and efficiency. This integrated solution not only enhances the scalability and performance of the database infrastructure but also simplifies management and maintenance tasks, offering a streamlined and resilient solution for your database requirements. Additionally, communications within the deployment are end-to-end encrypted, and the implementation of mTLS further fortifies security, ensuring data integrity and confidentiality.
 
 ## Tests and simulations
 
@@ -127,6 +131,10 @@ Here you can put your change to keep a trace of your work and decisions.
 * You can now install MaxScale as proxy balancer
 * You can enable the web UI and protect it with SSL/TLS
 * Compatible with Galera
+
+### 2024-03-08: Apache2
+
+* MaxScale is now secur with Apache2
 
 ## Authors
 

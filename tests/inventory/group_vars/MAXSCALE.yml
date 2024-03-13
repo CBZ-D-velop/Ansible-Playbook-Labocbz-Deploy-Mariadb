@@ -38,7 +38,7 @@ inv_install_maxscale__threads: "auto"
 inv_install_maxscale__threads_max: 256
 inv_install_maxscale__admin_enabled: true
 inv_install_maxscale__admin_gui: true
-inv_install_maxscale__admin_host: "0.0.0.0"
+inv_install_maxscale__admin_host: "127.0.0.1"
 inv_install_maxscale__admin_port: 8989
 inv_install_maxscale__admin_secure_gui: true
 inv_install_maxscale__admin_ssl_ca: "/etc/maxscale/ssl/my-mariadb-cluster.domain.tld/ca-chain.pem.crt"

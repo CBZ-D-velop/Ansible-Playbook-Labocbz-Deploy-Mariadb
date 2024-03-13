@@ -23,7 +23,7 @@
 
         - name: "Check Mariadb connectivity"
           ansible.builtin.wait_for:
-            host: "{{ inventory_hostname }}"
+            host: "localhost"
             port: "{{ inv_install_mariadb__port }}"
             timeout: 120
 
@@ -79,7 +79,7 @@
           block:
             - name: "Check MaxScale connectivity"
               ansible.builtin.wait_for:
-                host: "{{ inventory_hostname }}"
+                host: "localhost"
                 port: "{{ inv_install_maxscale__admin_port }}"
                 timeout: 120
 
@@ -88,7 +88,7 @@
               when: not (inv_install_maxscale__admin_secure_gui | default(false))
               failed_when: result.status != 200
               ansible.builtin.uri:
-                url: "http://{{ inventory_hostname }}:{{ inv_install_maxscale__admin_port }}/"
+                url: "http://localhost:{{ inv_install_maxscale__admin_port }}/"
                 method: "GET"
 
             - name: "Check MaxScale HTTPS"
@@ -96,5 +96,117 @@
               register: result
               failed_when: result.status != 200
               ansible.builtin.uri:
-                url: "https://{{ inventory_hostname }}:{{ inv_install_maxscale__admin_port }}/"
+                url: "https://localhost:{{ inv_install_maxscale__admin_port }}/"
+                method: "GET"
+
+    - name: "Verify APACHE2"
+      when: inv_install_apache | default(false)
+      block:
+        - name: "Get Apache2 service current state"
+          register: install_apache__service_status
+          failed_when: not install_apache__service_status.status.ActiveState == 'active'
+          ansible.builtin.systemd:
+            name: "apache2"
+
+        - name: "Check Apache2 folders and conf"
+          loop:
+            - "/etc/apache2/apache2.conf"
+            - "/etc/apache2/ports.conf"
+          loop_control:
+            loop_var: folder_path
+          register: folder_check
+          failed_when: not folder_check.stat.exists
+          ansible.builtin.stat:
+            path: "{{ folder_path }}"
+
+        - name: "Check Apache2 HTTP connectivity"
+          ansible.builtin.wait_for:
+            host: "localhost"
+            port: "{{ inv_install_apache__http_listen_port }}"
+            timeout: 120
+
+        - name: "Check Apache2 HTTPS connectivity"
+          ansible.builtin.wait_for:
+            host: "localhost"
+            port: "{{ inv_install_apache__https_listen_port }}"
+            timeout: 120
+
+        - name: "Get Apache2 service current state"
+          register: apache_service_status
+          failed_when: not apache_service_status.status.ActiveState == 'active'
+          ansible.builtin.systemd:
+            name: "apache2"
+
+        - name: "Check Apache2 default configuration"
+          block:
+            - name: "Check Apache2 folders and conf"
+              loop:
+                - "/etc/apache2/apache2.conf"
+                - "/etc/apache2/ports.conf"
+              loop_control:
+                loop_var: folder_path
+              register: folder_check
+              failed_when: not folder_check.stat.exists
+              ansible.builtin.stat:
+                path: "{{ folder_path }}"
+
+            - name: "Check Apache2 HTTP and conf"
+              loop: "{{ inv_add_apache_confs__configurations }}"
+              loop_control:
+                loop_var: vhost
+              register: folder_check
+              failed_when: not folder_check.stat.exists
+              ansible.builtin.stat:
+                path: "{{ inv_add_apache_confs__conf_path }}/{{ vhost.server.name }}-HTTP.conf"
+
+            - name: "Check Apache2 HTTPS and conf"
+              loop: "{{ inv_add_apache_confs__configurations }}"
+              loop_control:
+                loop_var: vhost
+              register: folder_check
+              when: vhost.ssl
+              failed_when: not folder_check.stat.exists
+              ansible.builtin.stat:
+                path: "{{ inv_add_apache_confs__conf_path }}/{{ vhost.server.name }}-HTTPS.conf"
+
+            - name: "Check HTTPS conf: certs"
+              loop: "{{ inv_add_apache_confs__configurations }}"
+              loop_control:
+                loop_var: vhost
+              register: folder_check
+              when: vhost.ssl.enabled | default(false)
+              failed_when: not folder_check.stat.exists
+              ansible.builtin.stat:
+                path: "{{ vhost.ssl.crt }}"
+
+            - name: "Check HTTPS conf: keys"
+              loop: "{{ inv_add_apache_confs__configurations }}"
+              loop_control:
+                loop_var: vhost
+              register: folder_check
+              when: vhost.ssl.enabled | default(false)
+              failed_when: not folder_check.stat.exists
+              ansible.builtin.stat:
+                path: "{{ vhost.ssl.key }}"
+
+        - name: "Check Apache2 webserver"
+          block:
+            - name: "Check Apache2 connectivity"
+              ansible.builtin.wait_for:
+                host: "localhost"
+                port: "{{ inv_add_apache_confs__http_listen_port }}"
+                timeout: 120
+
+            - name: "Check default vhost on HTTP"
+              register: result
+              failed_when: not (result.status == 200 or result.status == -1)
+              ansible.builtin.uri:
+                url: "http://localhost:{{ inv_add_apache_confs__http_listen_port }}/"
+                method: "GET"
+
+            - name: "Check default vhost on HTTPS"
+              register: result
+              failed_when: not (result.status == 200 or result.status == -1)
+              ansible.builtin.uri:
+                url: "https://localhost:{{ inv_add_apache_confs__https_listen_port }}/"
                 method: "GET"
