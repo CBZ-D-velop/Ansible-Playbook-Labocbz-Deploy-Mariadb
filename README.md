@@ -17,7 +17,6 @@
 ![Tag: mTLS](https://img.shields.io/badge/Tech-mTLS-orange)
 ![Tag: MaxScale](https://img.shields.io/badge/Tech-MaxScale-orange)
 
-
 An Ansible playbook to deploy and configure MariaDB on your host.
 
 This playbook streamlines the installation and configuration of MariaDB. It offers the flexibility to configure a multi-master cluster using Galera. The playbook is adept at setting up and configuring the cluster while also allowing you to modify and customize an administrative account for enhanced security. Additionally, it automates the steps typically carried out by the mysql_secure_installation command, making your MariaDB deployment and management even more convenient and secure.
@@ -28,7 +27,7 @@ This Ansible role can also be extended to incorporate MaxScale, a powerful datab
 
 ## Deployment diagramm
 
-![](./assets/Ansible-Playbook-Labocbz-Deploy-Mariadb.drawio.svg)
+![Ansible-Playbook-Labocbz-Deploy-Mariadb](./assets/Ansible-Playbook-Labocbz-Deploy-Mariadb.drawio.svg)
 
 This diagram depicts a potential deployment achieved with the described playbook. At its core lies a MariaDB service component, with three MariaDB instances distributed across three servers. These nodes interact with each other, forming a multi-master cluster, which offers advantages such as high availability and scalability.
 
@@ -45,7 +44,6 @@ With MaxScale orchestrating write operations and Apache2 facilitating secure acc
 You have to run multiples tests. *tests with an # are mandatory*
 
 ```MARKDOWN
-# lint
 # syntax
 # converge
 # idempotence
@@ -70,7 +68,6 @@ yamllint -c ./.yamllint .
 ansible-lint --config=./.ansible-lint .
 
 # Execute and test your playbook
-molecule lint
 molecule create
 molecule list
 molecule converge
@@ -135,6 +132,14 @@ Here you can put your change to keep a trace of your work and decisions.
 ### 2024-03-08: Apache2
 
 * MaxScale is now secur with Apache2
+
+### 2024-05-19: New CI
+
+* Added Markdown lint to the CICD
+* Rework all Docker images
+* Change CICD vars convention
+* New workers
+* Removed all automation based on branch
 
 ## Authors
 
